@@ -69,9 +69,9 @@ The research was based on the latest CIMPLICITY 11 version but is relevant for e
 | 9  | AuditDSAccess              | No Auditing               |
 
 ## IPsec rules - Insight #15
-The test in the script insures that CIMPLICITY client-server communication in the default ports is included in the firewall rules that defines IPsec protection.
+The test in the script ensures that CIMPLICITY client-server communication in the default ports is included in the firewall rules that defines IPsec protection.
 If the current machine has another rule, such as Historian, additional network functionality, such as communication with a secondary server, or the machine doesn't use default ports, there are different or additional ports that will need to be protected by IPsec.
-You can improve the test by adding those ports to the variable $IPSEC_PORTS in the begging of the script. 
+You can improve the test by adding those ports to the variable $IPSEC_PORTS in the beginning of the script. 
 For information about the used ports and instruction for IPsec correct configuration refer to the Windows Hardening Guide (Link above).    
 
 ## Authors
