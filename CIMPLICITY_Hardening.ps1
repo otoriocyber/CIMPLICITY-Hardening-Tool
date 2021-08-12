@@ -205,12 +205,12 @@ function Convert-SidToUser{
     [Parameter(Mandatory=$true)]
     [Hashtable]$WMI)
     
-    $users_info = $WMI["Win32_UserAccount"] | Where {$_.LocalAccount -eq $True}
-    if($user_info -eq $null){
+    $user_accout_info = $WMI["Win32_UserAccount"] | Where {$_.LocalAccount -eq $True}
+    if($user_accout_info -eq $null){
         return
     }
     
-    foreach($user in $user_info){
+    foreach($user in $user_accout_info){
         if($user.SID -eq $SID){
             return $user.Name
         }
@@ -355,10 +355,10 @@ Function Test-PasswordClearText{
     [Hashtable]$secpol
     )
     if($secpol["System Access"] -ne $null){
-        $complexity = $secpol["System Access"]["ClearTextPassword"]
+        $clear_text = $secpol["System Access"]["ClearTextPassword"]
 
         # Cleartext password is enabled
-        if ($complexity -eq $null -or $complexity -ne "0"){
+        if ($clear_text -eq $null -or $clear_text -ne "0"){
             $alerts.Add("Passwords are stored using reversible encryption") | Out-Null
         }
     }
@@ -545,14 +545,14 @@ function Test-RdpDisabled{
     [Hashtable]$registry
     )
     
-    $rdp_policy = $registry["HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"]
-    if($rdp_policy.fDenyTSConnections -ne $null -and $rdp_policy.fDenyTSConnections -ne 1){
+    $rdp_connections_policy = $registry["HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"]
+    if($rdp_connections_policy.fDenyTSConnections -ne $null -and $rdp_connections_policy.fDenyTSConnections -ne 1){
         $alerts.Add("Remote Desktop is enabled") | Out-Null
         return
     }
     
-    $rdp_status = $registry["HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server"]
-    if($rdp_policy.fDenyTSConnections -ne 1){
+    $rdp_connections_status = $registry["HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server"]
+    if($rdp_connections_status.fDenyTSConnections -ne 1){
         $alerts.Add("Remote Desktop is enabled") | Out-Null
     }
 }
@@ -563,8 +563,8 @@ function Test-RdpPromptsForPassword{
     [Hashtable]$registry
     )
 
-    $rdp_status = $registry["HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"]
-    if($rdp_policy.fPromptForPassword -ne 1){
+    $rdp_password_policy = $registry["HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"]
+    if($rdp_password_policy.fPromptForPassword -ne 1){
         $alerts.Add("Remote Desktop services don't always prompt for password upon connections") | Out-Null
     }
 }
